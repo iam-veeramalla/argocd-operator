@@ -20,10 +20,9 @@ func TestReconcileArgoCD_reconcileRoleBinding(t *testing.T) {
 	r := makeTestReconciler(t, a)
 
 	workloadIdentifier := "xrb"
-	expectedRole := &v1.Role{ObjectMeta: metav1.ObjectMeta{Name: workloadIdentifier, Namespace: a.Namespace}}
 	expectedServiceAccount := &corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Name: workloadIdentifier, Namespace: a.Namespace}}
 
-	assertNoError(t, r.reconcileRoleBinding(workloadIdentifier, expectedRole, expectedServiceAccount, a))
+	assertNoError(t, r.reconcileRoleBinding(workloadIdentifier, a))
 
 	roleBinding := &v1.RoleBinding{}
 	expectedName := fmt.Sprintf("%s-%s", a.Name, workloadIdentifier)
@@ -35,7 +34,7 @@ func TestReconcileArgoCD_reconcileRoleBinding(t *testing.T) {
 	assertNoError(t, r.client.Update(context.TODO(), roleBinding))
 
 	// try reconciling it again to ensure undesirable changes are overwritten
-	assertNoError(t, r.reconcileRoleBinding(workloadIdentifier, expectedRole, expectedServiceAccount, a))
+	assertNoError(t, r.reconcileRoleBinding(workloadIdentifier, a))
 
 	roleBinding = &v1.RoleBinding{}
 	assertNoError(t, r.client.Get(context.TODO(), types.NamespacedName{Name: expectedName, Namespace: a.Namespace}, roleBinding))
@@ -50,10 +49,7 @@ func TestReconcileArgoCD_reconcileClusterRoleBinding(t *testing.T) {
 	r := makeTestReconciler(t, a)
 
 	workloadIdentifier := "x"
-	expectedClusterRole := &v1.ClusterRole{ObjectMeta: metav1.ObjectMeta{Name: workloadIdentifier}}
 	expectedServiceAccount := &corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Name: workloadIdentifier, Namespace: a.Namespace}}
-
-	assertNoError(t, r.reconcileClusterRoleBinding(workloadIdentifier, expectedClusterRole, expectedServiceAccount, a))
 
 	clusterRoleBinding := &v1.ClusterRoleBinding{}
 	expectedName := fmt.Sprintf("%s-%s", a.Name, workloadIdentifier)
@@ -65,7 +61,7 @@ func TestReconcileArgoCD_reconcileClusterRoleBinding(t *testing.T) {
 	assertNoError(t, r.client.Update(context.TODO(), clusterRoleBinding))
 
 	// try reconciling it again to ensure undesirable changes are overwritten
-	assertNoError(t, r.reconcileClusterRoleBinding(workloadIdentifier, expectedClusterRole, expectedServiceAccount, a))
+	assertNoError(t, r.reconcileClusterRoleBinding(workloadIdentifier, a))
 
 	clusterRoleBinding = &v1.ClusterRoleBinding{}
 	assertNoError(t, r.client.Get(context.TODO(), types.NamespacedName{Name: expectedName}, clusterRoleBinding))

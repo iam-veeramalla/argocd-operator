@@ -19,6 +19,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
+	k8s "k8s.io/client-go/kubernetes"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -37,6 +38,7 @@ type ReconcileArgoCD struct {
 	// that reads objects from the cache and writes to the apiserver
 	client client.Client
 	scheme *runtime.Scheme
+	kc     *k8s.Clientset
 }
 
 var log = logf.Log.WithName("controller_argocd")
@@ -63,9 +65,10 @@ func add(mgr manager.Manager, r *ReconcileArgoCD) error {
 	return nil
 }
 
-// newReconciler returns a new reconcile.Reconciler
+// newReconciler returns a new *ReconcileArgoCD
 func newReconciler(mgr manager.Manager) *ReconcileArgoCD {
-	return &ReconcileArgoCD{client: mgr.GetClient(), scheme: mgr.GetScheme()}
+	kc, _ := k8s.NewForConfig(mgr.GetConfig())
+	return &ReconcileArgoCD{client: mgr.GetClient(), scheme: mgr.GetScheme(), kc: kc}
 }
 
 // Reconcile reads that state of the cluster for a ArgoCD object and makes changes based on the state read

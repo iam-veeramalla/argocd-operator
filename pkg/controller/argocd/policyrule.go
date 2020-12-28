@@ -2,6 +2,166 @@ package argocd
 
 import v1 "k8s.io/api/rbac/v1"
 
+func policyRuleForApplicationControllerClusterRole() []v1.PolicyRule {
+	return []v1.PolicyRule{
+		{
+			APIGroups: []string{
+				"*",
+			},
+			Resources: []string{
+				"*",
+			},
+			Verbs: []string{
+				"get",
+				"list",
+				"watch",
+			},
+		},
+		{
+			NonResourceURLs: []string{
+				"*",
+			},
+			Verbs: []string{
+				"get",
+				"list",
+			},
+		},
+	}
+}
+
+func policyRoleForClusterConfig() []v1.PolicyRule {
+	return []v1.PolicyRule{
+		{
+			APIGroups: []string{
+				"operators.coreos.com",
+			},
+			Resources: []string{
+				"*",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
+				"operator.openshift.io",
+			},
+			Resources: []string{
+				"*",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
+				"user.openshift.io",
+			},
+			Resources: []string{
+				"*",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
+				"config.openshift.io",
+			},
+			Resources: []string{
+				"*",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
+				"console.openshift.io",
+			},
+			Resources: []string{
+				"*",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+		{
+			APIGroups: []string{
+				"",
+			},
+			Resources: []string{
+				"namespaces",
+				"persistentvolumeclaims",
+				"persistentvolumes",
+				"configmaps",
+			},
+			Verbs: []string{
+				"*",
+			},
+		}, {
+			APIGroups: []string{
+				"rbac.authorization.k8s.io",
+			},
+			Resources: []string{
+				"*",
+			},
+			Verbs: []string{
+				"*",
+			},
+		}, {
+			APIGroups: []string{
+				"storage.k8s.io",
+			},
+			Resources: []string{
+				"*",
+			},
+			Verbs: []string{
+				"*",
+			},
+		},
+	}
+}
+
+func policyRuleForServerClusterRole() []v1.PolicyRule {
+	return []v1.PolicyRule{
+		{
+			APIGroups: []string{
+				"*",
+			},
+			Resources: []string{
+				"*",
+			},
+			Verbs: []string{
+				"get",
+			},
+		},
+		{
+			APIGroups: []string{
+				"",
+			},
+			Resources: []string{
+				"events",
+			},
+			Verbs: []string{
+				"list",
+			},
+		},
+		{
+			APIGroups: []string{
+				"",
+			},
+			Resources: []string{
+				"pods",
+				"pods/log",
+			},
+			Verbs: []string{
+				"get",
+			},
+		},
+	}
+}
+
 func policyRuleForApplicationController() []v1.PolicyRule {
 
 	return []v1.PolicyRule{
