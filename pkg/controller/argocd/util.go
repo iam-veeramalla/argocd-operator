@@ -566,6 +566,16 @@ func (r *ReconcileArgoCD) reconcileResources(cr *argoprojv1a1.ArgoCD) error {
 		return err
 	}
 
+	log.Info("reconcling roles")
+	if _, err := r.reconcileRoles(cr); err != nil {
+		return err
+	}
+
+	log.Info("reconcling rolebindings")
+	if err := r.reconcileRoleBindings(cr); err != nil {
+		return err
+	}
+
 	log.Info("reconciling service accounts")
 	if err := r.reconcileServiceAccounts(cr); err != nil {
 		return err
@@ -707,6 +717,18 @@ func watchResources(c controller.Controller, clusterRoleBindingMapper handler.To
 
 	// Watch for changes to Secret sub-resources owned by ArgoCD instances.
 	if err := watchOwnedResource(c, &appsv1.StatefulSet{}); err != nil {
+		return err
+	}
+
+	if err := watchOwnedResource(c, &v1.Role{}); err != nil {
+		return err
+	}
+
+	if err := watchOwnedResource(c, &v1.RoleBinding{}); err != nil {
+		return err
+	}
+
+	if err := watchOwnedResource(c, &v1.ClusterRoleBinding{}); err != nil {
 		return err
 	}
 

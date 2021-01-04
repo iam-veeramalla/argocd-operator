@@ -36,17 +36,17 @@ spec:
                   CD injects the app name as a tracking label.
                 type: string
               configManagementPlugins:
-                description: ConfigManagementPlugins is used to specify additional config
-                  management plugins.
+                description: ConfigManagementPlugins is used to specify additional
+                  config management plugins.
                 type: string
               controller:
-                description: Controller defines the Application Controller options for
-                  ArgoCD.
+                description: Controller defines the Application Controller options
+                  for ArgoCD.
                 properties:
                   appSync:
                     description: "AppSync is used to control the sync frequency, by
-                      default the ArgoCD controller polls Git every 3m by default. \n
-                      Set this to a duration, e.g. 10m or 600s to control the synchronisation
+                      default the ArgoCD controller polls Git every 3m by default.
+                      \n Set this to a duration, e.g. 10m or 600s to control the synchronisation
                       frequency."
                     type: string
                   processors:
@@ -64,8 +64,8 @@ spec:
                         type: integer
                     type: object
                   resources:
-                    description: Resources defines the Compute Resources required by
-                      the container for the Application Controller.
+                    description: Resources defines the Compute Resources required
+                      by the container for the Application Controller.
                     properties:
                       limits:
                         additionalProperties:
@@ -105,8 +105,8 @@ spec:
                       for the Dex server.
                     type: boolean
                   resources:
-                    description: Resources defines the Compute Resources required by
-                      the container for Dex.
+                    description: Resources defines the Compute Resources required
+                      by the container for Dex.
                     properties:
                       limits:
                         additionalProperties:
@@ -135,12 +135,9 @@ spec:
                     description: Version is the Dex container image tag.
                     type: string
                 type: object
-              disableAdmin:
-                description: DisableAdmin will disable the admin user.
-                type: boolean
               gaAnonymizeUsers:
-                description: GAAnonymizeUsers toggles user IDs being hashed before sending
-                  to google analytics.
+                description: GAAnonymizeUsers toggles user IDs being hashed before
+                  sending to google analytics.
                 type: boolean
               gaTrackingID:
                 description: GATrackingID is the google analytics tracking ID to use.
@@ -149,7 +146,8 @@ spec:
                 description: Grafana defines the Grafana server options for ArgoCD.
                 properties:
                   enabled:
-                    description: Enabled will toggle Grafana support globally for ArgoCD.
+                    description: Enabled will toggle Grafana support globally for
+                      ArgoCD.
                     type: boolean
                   host:
                     description: Host is the hostname to use for Ingress/Route resources.
@@ -158,8 +156,8 @@ spec:
                     description: Image is the Grafana container image.
                     type: string
                   ingress:
-                    description: Ingress defines the desired state for an Ingress for
-                      the Grafana component.
+                    description: Ingress defines the desired state for an Ingress
+                      for the Grafana component.
                     properties:
                       annotations:
                         additionalProperties:
@@ -167,6 +165,12 @@ spec:
                         description: Annotations is the map of annotations to apply
                           to the Ingress.
                         type: object
+                      enabled:
+                        description: Enabled will toggle the creation of the Ingress.
+                        type: boolean
+                      path:
+                        description: Path used for the Ingress resource.
+                        type: string
                       tls:
                         description: TLS configuration. Currently the Ingress only
                           supports a single TLS port, 443. If multiple members of
@@ -373,8 +377,15 @@ spec:
                   scope managed by argocd.
                 properties:
                   cluster:
-                    description: Cluster when enabled lets ArgoCD manage cluster resources.
+                    description: ClusterConfig when enabled lets ArgoCD managed cluster-scoped
+                      resources.
                     type: boolean
+                  namespaces:
+                    description: Namespaces is list of the namespaces where the argocd
+                      application controller can deploy applications to.
+                    items:
+                      type: string
+                    type: array
                 type: object
               oidcConfig:
                 description: OIDCConfig is the OIDC configuration as an alternative

@@ -43,6 +43,12 @@ type ArgoCD struct {
 	Status ArgoCDStatus `json:"status,omitempty"`
 }
 
+// ArgoCDScope defines the scope of resources that ArgoCD would be managing
+type ArgoCDScope struct {
+	// Cluster when enabled lets ArgoCD manage cluster resources.
+	Cluster *bool `json:"cluster,omitempty"`
+}
+
 // ArgoCDApplicationControllerProcessorsSpec defines the options for the ArgoCD Application Controller processors.
 type ArgoCDApplicationControllerProcessorsSpec struct {
 	// Operation is the number of application operation processors.
@@ -319,6 +325,10 @@ type ArgoCDServerServiceSpec struct {
 // ArgoCDSpec defines the desired state of ArgoCD
 // +k8s:openapi-gen=true
 type ArgoCDSpec struct {
+
+	// ManagementScope defines the cluster scope or namespace scope managed by argocd.
+	ManagementScope ArgoCDScope `json:"managementScope,omitempty"`
+
 	// ApplicationInstanceLabelKey is the key name where Argo CD injects the app name as a tracking label.
 	ApplicationInstanceLabelKey string `json:"applicationInstanceLabelKey,omitempty"`
 
