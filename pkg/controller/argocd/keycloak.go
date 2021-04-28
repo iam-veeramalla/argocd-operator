@@ -46,7 +46,7 @@ var (
 	controllerRef  bool  = true
 )
 
-// getKeycloakContainerImage will return the container image for Keycloak.
+// getKeycloakContainerImage will return container image for Keycloak.
 func getKeycloakContainerImage(img string, ver string) string {
 	return argoutil.CombineImageTag(img, ver)
 }
