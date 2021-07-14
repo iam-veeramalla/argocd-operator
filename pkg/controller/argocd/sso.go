@@ -154,13 +154,6 @@ func (r *ReconcileArgoCD) reconcileSSO(cr *argoprojv1a1.ArgoCD) error {
 					changed = true
 				}
 
-				if changed {
-					err = r.client.Update(context.TODO(), existingDC)
-					if err != nil {
-						return err
-					}
-				}
-
 				// If Keycloak deployment exists and a realm is already created for ArgoCD, Do not create a new one.
 				if existingDC.Status.AvailableReplicas == expectedReplicas &&
 					existingDC.Annotations["argocd.argoproj.io/realm-created"] == "false" {
@@ -187,10 +180,7 @@ func (r *ReconcileArgoCD) reconcileSSO(cr *argoprojv1a1.ArgoCD) error {
 
 						// Update Realm creation. This will avoid posting of realm configuration on further reconciliations.
 						existingDC.Annotations["argocd.argoproj.io/realm-created"] = "true"
-						err = r.client.Update(context.TODO(), existingDC)
-						if err != nil {
-							return err
-						}
+						changed = true
 
 						err = r.updateArgoCDConfiguration(cr, keycloakRouteURL)
 						if err != nil {
@@ -198,6 +188,13 @@ func (r *ReconcileArgoCD) reconcileSSO(cr *argoprojv1a1.ArgoCD) error {
 								cr.Name, cr.Namespace))
 							return err
 						}
+					}
+				}
+
+				if changed {
+					err = r.client.Update(context.TODO(), existingDC)
+					if err != nil {
+						return err
 					}
 				}
 
